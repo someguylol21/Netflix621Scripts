@@ -17,7 +17,7 @@ local Hats = {}
 local ReanimateConfig = KryptonConfiguration or {}
 local DontStartYet = ReanimateConfig.DontStartYet -- Patchfix for private testing
 local FlingTable, ReturnOnDeath, RigName, WaitTime, RigScale, DestroyHeightOffset, RadiusOffset, FlingMethod, FlingVelocity, RefitCount
-local Flinging, OverlayFakeCharacter, NoBodyNearby, PermanentDeath, Reclaim, AntisleepPower, Refit, AntiVoiding, NoCollisions, SetPlayerChar, ToolFlinging, LimitHatsPerLimb, DisableCharacterScripts
+local Flinging, OverlayFakeCharacter, NoBodyNearby, PermanentDeath, Reclaim, AntisleepPower, Refit, AntiVoiding, AntiVoidingTargetg, NoCollisions, SetPlayerChar, ToolFlinging, LimitHatsPerLimb, DisableCharacterScripts
 
 local GetPropertyChangedSignal = function(parent: Instance, Name: string)
     return parent:GetPropertyChangedSignal(Name)
@@ -906,7 +906,7 @@ local function StartReanimate()
 
 	Hats = ValidateSetting("Hats", {})
 	
-	FallenPartsDestroyHeightOffset = FallenPartsDestroyHeight + DestroyHeightOffset or 100
+	FallenPartsDestroyHeightOffset = FallenPartsDestroyHeight + DestroyHeightOffset or AntiVoidingTarget
 	Character = Player['Character'] or SignalWait(Player['CharacterAdded'])
 
 	if not PermanentDeath and ReanimateConfig.Refit then
