@@ -44,6 +44,7 @@ KryptonConfiguration = {
 
 	NoCollisions = false,
 	AntiVoiding = true,
+	AntiVoidingTarget = 100,
 	SetSimulationRadius = false,
 	DisableCharacterScripts = true,
 	AccessoryFallbackDefaults = true,
