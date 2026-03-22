@@ -90,14 +90,17 @@ KryptonConfiguration = {
 }
 loadstring(game:HttpGet("https://raw.githubusercontent.com/someguylol21/Netflix621Scripts/refs/heads/main/KryptonFixed.lua"))()
 ```
-# Krystal Dance V3 (Modified, Fixed + R15 To R6 Emotes + UGC Emotes + Custom R6 Emotes + Custom UI + Search Bar + Cleanup Emotes + Toggleable Keybinds, someguylol_21)
+# Krystal Dance V3
+Modified, Fixed + R15 To R6 Emotes + UGC Emotes + 1358 Emotes + Custom UI + Search Bar + Anti-Double Execution + Toggleable Keybinds, someguylol_21. You can easily add UGC Emotes to the 'r15UGC' array
 ```lua
 getgenv().KeepKeybinds = true
 getgenv().AutoPlayEmoteOnUI = true -- instead of you having to stop and start an emote, you can instantly play it.
-loadstring(game:HttpGet("https://raw.githubusercontent.com/someguylol21/Netflix621Scripts/refs/heads/main/KrystalDanceModded.lua"))()
+--getgenv().KrystalDanceRunning = false -- use if you cant execute the script (ONLY ONCE)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/someguylol21/Netflix621Scripts/refs/heads/main/KrystalDanceEpicMod.lua"))()
 ```
 
-# Krystal Dance V3 (Original, Fixed + Improved, MrY7zz)
+# Krystal Dance V3
+Original, Fixed + Improved, MrY7zz
 ```lua
 loadstring(game:HttpGet("https://raw.githubusercontent.com/someguylol21/Netflix621Scripts/refs/heads/main/KrystalDanceV3.lua"))()
 ```
