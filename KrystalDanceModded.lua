@@ -514,7 +514,7 @@ ghostRig:ScaleTo(char:GetScale())
 
 for _, part in pairs(ghostRig:GetDescendants()) do
     if part:IsA('BasePart') or part:IsA('MeshPart') then
-        part.Transparency = 0.6
+        part.Transparency = 1
 		--if part.Name == "HumanoidRootPart" then part.Transparency = 1 end
         part.CanCollide = false
 		if part.Name ~= "HumanoidRootPart" then
