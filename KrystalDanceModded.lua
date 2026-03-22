@@ -2,6 +2,15 @@
 -- Modified by someguylol_21 (github + discord)
 repeat task.wait() until game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Head and game.Players.LocalPlayer.Character.Torso.Neck
 
+local cleanupEmotes
+local humDiedConnection
+humDiedConnection = game:GetService('RunService').PreSimulation:Connect(function()
+	if game.Players.LocalPlayer.Character.Humanoid.Health == 0 or game.Players.LocalPlayer.Character.Humanoid.Health < 0 then
+		cleanupEmotes()
+	end
+end)
+
+
 function stringStartsWith(str, start)
 	return string.sub(str, 1, string.len(start)) == start
 end
@@ -198,6 +207,29 @@ ExitBtn.TextWrapped = true
 UICorner.CornerRadius = UDim.new(0, 4)
 UICorner.Parent = ExitBtn
 
+local DevButton= Instance.new("TextButton")
+local DevButtonCorner = Instance.new("UICorner")
+
+DevButton.Name = "DevButton"
+DevButton.Parent = MainMenuFrame
+local DevButtonOnColor = Color3.fromRGB(50, 0, 53)
+local DevButtonOffColor = Color3.fromRGB(53, 0, 48)
+local devModeOn = false
+DevButton.BackgroundColor3 = DevButtonOffColor
+DevButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+DevButton.BorderSizePixel = 0
+DevButton.Position = UDim2.new(0, 0, 0, -80)
+DevButton.Size = UDim2.new(0, 15, 0, 15)
+DevButton.Font = Enum.Font.Unknown
+DevButton.Text = "S"
+DevButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+DevButton.TextScaled = true
+DevButton.TextSize = 40.000
+DevButton.TextWrapped = true
+
+DevButtonCorner.CornerRadius = UDim.new(0, 4)
+DevButtonCorner.Parent = DevButton
+
 TempSlotHolder.Name = "Temp"
 Template.Name = "Template"
 Template.Parent = TempSlotHolder
@@ -303,7 +335,7 @@ UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanva
 
 ExitBtn.MouseButton1Click:Connect(function()
     game.Players.LocalPlayer.Character.Humanoid.Health = 0
-    EmoteUI:Destroy()
+    cleanupEmotes()
 end)
 
 local function getnext(tbl, number)
@@ -423,7 +455,7 @@ allowframeloss = false
 tossremainder = false
 lastframe = tick()
 script.Heartbeat:Fire()
-game:GetService('RunService').Heartbeat:Connect(function(s, p)
+local runServiceConnection1 = game:GetService('RunService').Heartbeat:Connect(function(s, p)
 	tf = tf + s
 	if tf >= frame then
 		if allowframeloss then
@@ -482,12 +514,25 @@ ghostRig:ScaleTo(char:GetScale())
 
 for _, part in pairs(ghostRig:GetDescendants()) do
     if part:IsA('BasePart') or part:IsA('MeshPart') then
-        part.Transparency = 1
+        part.Transparency = 0.6
 		--if part.Name == "HumanoidRootPart" then part.Transparency = 1 end
         part.CanCollide = false
-        part.Anchored = false
+		if part.Name ~= "HumanoidRootPart" then
+        	part.Anchored = false
+		end
     end
 end
+
+DevButton.MouseButton1Click:Connect(function()
+	devModeOn = not devModeOn
+	local transperency = 1
+	if devModeOn then transperency = 0.7 end
+	for _, part in pairs(ghostRig:GetDescendants()) do
+		if part:IsA('BasePart') or part:IsA('MeshPart') then
+			part.Transparency = transperency
+		end
+	end
+end)
 
 local ghostHum = ghostRig:FindFirstChildOfClass('Humanoid')
 local ghostAnimator = ghostHum:FindFirstChildOfClass('Animator') or Instance.new('Animator', ghostHum)
@@ -502,11 +547,6 @@ ghostUpdateConn = RunService.PreSimulation:Connect(function()
         ghostRig.UpperTorso.CanCollide = false
         ghostRig.LowerTorso.CanCollide = false
     end
-	if char.Humanoid.Health == 0 and ghostRig then
-		ghostRig:Destroy()
-		ghostUpdateConn:Disconnect()
-		EmoteUI:Destroy()
-	end
 end)
 
 local retargetMap = {
@@ -2128,6 +2168,12 @@ local function startRetarget()
 				if r6name == "Left Arm" or r6name == "Right Arm" then
 					output = output * CFrame.new(0, 0.25, 0)
 				end
+				if r6name == "Left Leg" or r6name == "Right Leg" then
+					output = output * CFrame.new(0, 0.2, 0)
+				end
+				if r6name == "Torso" then
+					output = output * CFrame.new(0, 0, -0.2)
+				end
                 motor.Transform = output
 				print(motor.Transform.Position, output.Position)
             end
@@ -2140,9 +2186,15 @@ local function stopRetarget()
         retargetConn:Disconnect()
         retargetConn = nil
     end
+	for _, motor in pairs(rigTable) do
+		motor.Transform = CFrame.new()
+	end
+	for _, motor in pairs(ghostRigTable) do
+		motor.Transform = CFrame.new()
+	end
 end
 
-char.AncestryChanged:Connect(function()
+local charAddedConnection = char.AncestryChanged:Connect(function()
     if not char:IsDescendantOf(game) then
         if retargetConn then retargetConn:Disconnect() end
         ghostRig:Destroy()
@@ -2151,6 +2203,7 @@ char.AncestryChanged:Connect(function()
     end
 end)
 
+local currentAnimID
 local function playanim(id, speed, isDance, customInstance)
 	speed = speed or 1
 
@@ -2172,6 +2225,7 @@ local function playanim(id, speed, isDance, customInstance)
 	currentanim.Speed = speed
 	currentanim.Looped = true
 	currentanim:Play()
+	currentAnimID = id
     stopRetarget()
 end
 
@@ -2204,6 +2258,7 @@ local function playanim2(id: string, customThing)
 	currentanim.Speed = speed
 	currentanim.Looped = true
 	currentanim:Play()
+	currentAnimID = id
 
     if isR15Anim(asset) then
         startRetarget()
@@ -2262,6 +2317,7 @@ local function stopanim()
 	if loopsplaying > 0 then
 		loopsplaying -= 1
 	end
+	currentAnimID = nil
 	playanother = true
 	playanother = true
 	playanother = true
@@ -2309,8 +2365,13 @@ end
 
 local currentUGCAnim
 local function playR15UGC(id)
-    if not dancing then
-        --stopanim()
+    if (not dancing) or (currentAnimID ~= id and getgenv().AutoPlayEmoteOnUI) then
+		if dancing then
+			currentUGCAnim:Stop(0)
+            currentUGCAnim = nil
+        	stopanim()
+			stopRetarget()
+		end
 		if currentanim then
 			currentanim:Stop()
 			currentanim = nil
@@ -2329,14 +2390,16 @@ local function playR15UGC(id)
         track.Looped = true
         track:Play()
         currentUGCAnim = track
+		currentAnimID = id
 
         task.wait() -- let first pose apply
         startRetarget()
     else
         if currentUGCAnim then
-            currentUGCAnim:Stop(0.2)
+            currentUGCAnim:Stop(0)
             currentUGCAnim = nil
         end
+		currentUGCAnimID = nil
         stopRetarget()
 		stopanim()
         dancing = false
@@ -2513,7 +2576,7 @@ R6Btn.MouseButton1Click:Connect(function()
 		btn.Name = v.Name
 		btn.Text = coolThingyThing[1]
 		btn.MouseButton1Click:Connect(function()
-			if dancing == false then
+			if dancing == false or (currentAnimID ~= v.Name and getgenv().AutoPlayEmoteOnUI) then
 				stopanim()
 				dancing = true
 				task.wait(0.005)
@@ -2553,7 +2616,7 @@ CustomR6Btn.MouseButton1Click:Connect(function()
 		btn.Name = v.Name
 		btn.Text = v.Name
 		btn.MouseButton1Click:Connect(function()
-			if dancing == false then
+			if dancing == false or (currentAnimID ~= v.Name and getgenv().AutoPlayEmoteOnUI) then
 				stopanim()
 				dancing = true
 				task.wait(0.005)
@@ -2572,11 +2635,11 @@ CustomR6Btn.MouseButton1Click:Connect(function()
 	currentButtonCagerory = 2
 end)
 
-local INPUTLOOP
+local INPUTLOOPConnection
 local uis = game:GetService('UserInputService')
 
 if getgenv().KeepKeybinds then
-INPUTLOOP = uis.InputBegan:Connect(function(k, chatting)
+INPUTLOOPConnection = uis.InputBegan:Connect(function(k, chatting)
 	if char.Humanoid.Sit == true then
 		return
 	end
@@ -3296,7 +3359,7 @@ INPUTLOOP = uis.InputBegan:Connect(function(k, chatting)
 end)
 end
 
-char.Humanoid:GetPropertyChangedSignal('MoveDirection'):Connect(function()
+local moveDirectionConnection = char.Humanoid:GetPropertyChangedSignal('MoveDirection'):Connect(function()
 	if char.Humanoid.Sit == false then
 		if
 			char.Humanoid.MoveDirection == Vector3.new(0, 0, 0)
@@ -3352,7 +3415,7 @@ char.Humanoid:GetPropertyChangedSignal('MoveDirection'):Connect(function()
 		end
 	end
 end)
-char.Humanoid:GetPropertyChangedSignal('Sit'):Connect(function()
+local sitConnection = char.Humanoid:GetPropertyChangedSignal('Sit'):Connect(function()
 	print('sit')
 	if char.Humanoid.Sit == true then
 		stopanim()
@@ -3411,7 +3474,7 @@ local find = table.find
 local atan = math.atan
 local atan2 = math.atan2
 
-Humanoid.StateChanged:Connect(function(_, new)
+local humanoidStateChangedConnection = Humanoid.StateChanged:Connect(function(_, new)
 	IsAllowedState = (find(AllowedStates, new) ~= nil)
 end)
 local oldC0N = Neck.C0
@@ -3465,11 +3528,7 @@ for i = 1, 29 do
 end
 bigfedora:Remove()
 local nim = 0
-char.Humanoid.Died:Connect(function()
-	sound69.PlaybackSpeed = 0
-	sound69.Parent = nil
-	sound69.Volume = 0
-end)
+
 local hum = char.Humanoid
 local cf = CFrame.new
 local DIEDLOOP
@@ -3479,7 +3538,7 @@ repeat
 	task.wait(1 / 60)
 	nim = nim + 1
 until nim == 3
-RunService.RenderStepped:Connect(function(deltaTime: number)
+local runServiceConnection = RunService.RenderStepped:Connect(function(deltaTime: number)
 	local function Alpha(n)
 		return math.clamp(n * deltaTime * 60, 0, 1)
 	end
@@ -3524,3 +3583,21 @@ RunService.RenderStepped:Connect(function(deltaTime: number)
 	end
 end)
 --
+
+cleanupEmotes = function()
+	if runServiceConnection then runServiceConnection:Disconnect() end
+	if runServiceConnection1 then runServiceConnection1:Disconnect() end
+	if sitConnection then sitConnection:Disconnect() end
+	if charAddedConnection then charAddedConnection:Disconnect() end
+	if moveDirectionConnection then moveDirectionConnection:Disconnect() end
+	if humanoidStateChangedConnection then humanoidStateChangedConnection:Disconnect() end
+	if retargetConn then retargetConn:Disconnect() end
+	if ghostUpdateConn then ghostUpdateConn:Disconnect() end
+	if ghostRig then ghostRig:Destroy() end
+	if EmoteUI then EmoteUI:Destroy() end
+	stopanim()
+	stopRetarget()
+	if sound69 then sound69:Destroy() end
+	if humDiedConnection then humDiedConnection:Disconnect() end
+end
+
