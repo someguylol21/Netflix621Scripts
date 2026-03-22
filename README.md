@@ -90,9 +90,10 @@ KryptonConfiguration = {
 }
 loadstring(game:HttpGet("https://raw.githubusercontent.com/someguylol21/Netflix621Scripts/refs/heads/main/KryptonFixed.lua"))()
 ```
-# Krystal Dance V3 (Modified, Fixed + R15 To R6 Emotes + UGC Emotes + Custom R6 Emotes + Custom UI + Search Bar, someguylol_21)
+# Krystal Dance V3 (Modified, Fixed + R15 To R6 Emotes + UGC Emotes + Custom R6 Emotes + Custom UI + Search Bar + Cleanup Emotes + Toggleable Keybinds, someguylol_21)
 ```lua
-getgenv().KeepKeybinds = false
+getgenv().KeepKeybinds = true
+getgenv().AutoPlayEmoteOnUI = true -- instead of you having to stop and start an emote, you can instantly play it.
 loadstring(game:HttpGet("https://raw.githubusercontent.com/someguylol21/Netflix621Scripts/refs/heads/main/KrystalDanceModded.lua"))()
 ```
 
