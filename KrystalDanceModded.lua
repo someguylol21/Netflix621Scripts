@@ -3,13 +3,6 @@
 repeat task.wait() until game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Head and game.Players.LocalPlayer.Character.Torso.Neck
 
 local cleanupEmotes
-local humDiedConnection
-humDiedConnection = game:GetService('RunService').PreSimulation:Connect(function()
-	if game.Players.LocalPlayer.Character.Humanoid.Health == 0 or game.Players.LocalPlayer.Character.Humanoid.Health < 0 then
-		cleanupEmotes()
-	end
-end)
-
 
 function stringStartsWith(str, start)
 	return string.sub(str, 1, string.len(start)) == start
@@ -213,7 +206,7 @@ local DevButtonCorner = Instance.new("UICorner")
 DevButton.Name = "DevButton"
 DevButton.Parent = MainMenuFrame
 local DevButtonOnColor = Color3.fromRGB(50, 0, 53)
-local DevButtonOffColor = Color3.fromRGB(53, 0, 48)
+local DevButtonOffColor = Color3.fromRGB(85, 0, 78)
 local devModeOn = false
 DevButton.BackgroundColor3 = DevButtonOffColor
 DevButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
@@ -335,7 +328,6 @@ UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanva
 
 ExitBtn.MouseButton1Click:Connect(function()
     game.Players.LocalPlayer.Character.Humanoid.Health = 0
-    cleanupEmotes()
 end)
 
 local function getnext(tbl, number)
@@ -526,7 +518,11 @@ end
 DevButton.MouseButton1Click:Connect(function()
 	devModeOn = not devModeOn
 	local transperency = 1
-	if devModeOn then transperency = 0.7 end
+	if devModeOn then 
+		transperency = 0.7 
+		DevButton.Text = "H"
+		DevButton.BackgroundColor3 = DevButtonOnColor
+	end
 	for _, part in pairs(ghostRig:GetDescendants()) do
 		if part:IsA('BasePart') or part:IsA('MeshPart') then
 			part.Transparency = transperency
@@ -3584,6 +3580,8 @@ local runServiceConnection = RunService.RenderStepped:Connect(function(deltaTime
 end)
 --
 
+local humDiedConnection
+
 cleanupEmotes = function()
 	if runServiceConnection then runServiceConnection:Disconnect() end
 	if runServiceConnection1 then runServiceConnection1:Disconnect() end
@@ -3601,3 +3599,8 @@ cleanupEmotes = function()
 	if humDiedConnection then humDiedConnection:Disconnect() end
 end
 
+humDiedConnection = RunService.PreSimulation:Connect(function()
+	if char.Humanoid.Health == 0 or char.Humanoid.Health < 0 then
+		cleanupEmotes()
+	end
+end)
