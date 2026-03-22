@@ -99,7 +99,7 @@ getgenv().AutoPlayEmoteOnKeybind = true
 getgenv().FallbackEmoteSound = 'egypt.mp3'
 getgenv().DisableOxide = true -- bypasses adonis anti-cheat
 --getgenv().KrystalDanceRunning = false -- use if you cant execute the script (ONLY ONCE)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/someguylol21/Netflix621Scripts/refs/heads/main/KrystalDanceEpicMod.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/someguylol21/Netflix621Scripts/refs/heads/main/KrystalDanceEpicified.lua"))()
 ```
 
 # Krystal Dance V3
