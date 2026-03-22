@@ -3,6 +3,7 @@ Scripts for Netflix621 (Private roblox sober/linux exec)
 
 # Krypton Reanimate
 ```lua
+-- Note: I added MediHood, VarietyShades and RobloxVisor2019 as the head so you need that too if u want to look cool
 --[[
 	Free Version:
 	https://www.roblox.com/catalog/4645404679/International-Fedora-Thailand
@@ -43,8 +44,8 @@ KryptonConfiguration = {
 	Animations = true,
 
 	NoCollisions = false,
-	AntiVoiding = true,
-	AntiVoidingTarget = 100,
+	AntiVoiding = false, -- set to false for natural disaster survival
+    AntiVoidingTarget = 100,
 	SetSimulationRadius = false,
 	DisableCharacterScripts = true,
 	AccessoryFallbackDefaults = true,
@@ -56,12 +57,12 @@ KryptonConfiguration = {
 	Hats = {
 		["Right Arm"] = {
 			{Texture = "14255544465", Mesh = "14255522247", Name = "RARM", Offset = CFrame.Angles(0, 0, math.rad(90))},
-			{Texture = "4645402630", Mesh = "3030546036", Name = "International Fedora", Offset = CFrame.new(0.25,0,0) * CFrame.Angles(math.rad(-90), 0, math.rad(-90))},
+			{Texture = "4645402630", Mesh = "3030546036", Name = "International Fedora", Offset = CFrame.new(0.1,0,0) * CFrame.Angles(math.rad(-90), 0, math.rad(-90))},
 		},
 
 		["Left Arm"] = {
 			{Texture = "14255544465", Mesh = "14255522247", Name = "LARM", Offset = CFrame.Angles(0, 0, math.rad(90))},
-			{Texture = "3650139425", Mesh = "3030546036", Name = "International Fedora", Offset = CFrame.new(-0.25,0,0) * CFrame.Angles(math.rad(-90), 0, math.rad(90))}
+			{Texture = "3650139425", Mesh = "3030546036", Name = "International Fedora", Offset = CFrame.new(-0.1,0,0) * CFrame.Angles(math.rad(-90), 0, math.rad(90))}
 		},
 
 		["Right Leg"] = {
@@ -79,6 +80,11 @@ KryptonConfiguration = {
 		["Torso"] = {
 			{Texture = "13415110780", Mesh = "13421774668", Name = "MeshPartAccessory", Offset = CFrame.identity},
 			{Texture = "4819722776", Mesh = "4819720316", Name = "MeshPartAccessory", Offset = CFrame.Angles(0, 0, math.rad(-15))}
+		},
+        ["Head"] = {
+			{Texture = "617406825", Mesh = "617474228", Name = "MediHood", Offset = CFrame.identity},
+			{Texture = "376188793", Mesh = "116436358", Name = "VarietyShades02", Offset = CFrame.new(0, 0.125, -0.4) },
+            {Texture = "2646470932", Mesh = "1081088", Name = "RobloxVisor2019", Offset = CFrame.new(0, 0.4, -0.6)}
 		},
 	},
 }
