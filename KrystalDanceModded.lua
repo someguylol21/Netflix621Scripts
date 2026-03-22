@@ -522,6 +522,9 @@ DevButton.MouseButton1Click:Connect(function()
 		transperency = 0.7 
 		DevButton.Text = "H"
 		DevButton.BackgroundColor3 = DevButtonOnColor
+	else
+		DevButton.Text = "S"
+		DevButton.BackgroundColor3 = DevButtonOffColor
 	end
 	for _, part in pairs(ghostRig:GetDescendants()) do
 		if part:IsA('BasePart') or part:IsA('MeshPart') then
