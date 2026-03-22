@@ -94,7 +94,10 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/someguylol21/Netflix6
 Modified, Fixed + R15 To R6 Emotes + UGC Emotes + 1358 Emotes + Custom UI + Search Bar + Anti-Double Execution + Toggleable Keybinds, someguylol_21. You can easily add UGC Emotes to the 'r15UGC' array
 ```lua
 getgenv().KeepKeybinds = true
-getgenv().AutoPlayEmoteOnUI = true -- instead of you having to stop and start an emote, you can instantly play it.
+getgenv().AutoPlayEmoteOnUI = true -- instead of you having to stop and start an emote, you can instantly play it. (UI)
+getgenv().AutoPlayEmoteOnKeybind = true
+getgenv().FallbackEmoteSound = 'egypt.mp3'
+getgenv().DisableOxide = true -- bypasses adonis anti-cheat
 --getgenv().KrystalDanceRunning = false -- use if you cant execute the script (ONLY ONCE)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/someguylol21/Netflix621Scripts/refs/heads/main/KrystalDanceEpicMod.lua"))()
 ```
